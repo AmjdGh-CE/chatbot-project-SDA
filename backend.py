@@ -39,15 +39,7 @@ model = "gpt-3.5-turbo"
 
 llm = ChatOpenAI(model=model)
 
-# LangChain setup
-embedding_function = OpenAIEmbeddings()
-chroma_client = chromadb.HttpClient(host=os.environ.get("CHROMADB_HOST"), port=os.environ.get("CHROMADB_PORT"))
-collection = chroma_client.get_or_create_collection("langchain")
-vectorstore = Chroma(
-            client=chroma_client,
-            collection_name="langchain",
-            embedding_function=embedding_function,
-)
+
 
 storage_account_sas_url = os.environ.get("AZURE_STORAGE_SAS_URL")
 storage_container_name = os.environ.get("AZURE_STORAGE_CONTAINER")
