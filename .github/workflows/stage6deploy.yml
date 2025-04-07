@@ -40,9 +40,9 @@ jobs:
     # Update the VM with secure token passing
     - name: Azure VM Update
       run: |
-        az vmss extension set \
+        az vm extension set \
           --resource-group ${{ secrets.RESOURCE_GROUP }} \
-          --vmss-name ${{ secrets.VM_NAME }} \
+          --vm-name ${{ secrets.VM_NAME }} \
           --name CustomScript \
           --force-update \
           --publisher Microsoft.Azure.Extensions \
