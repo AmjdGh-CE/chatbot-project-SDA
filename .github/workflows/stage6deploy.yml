@@ -49,9 +49,8 @@ jobs:
       run: |
         az vmss extension set \
           --resource-group ${{ secrets.RESOURCE_GROUP }} \
-          --vmss-name ${{ secrets.VMSS_NAME }} \
+          --vmss-name ${{ secrets.VMSS_NAME }}\
           --name CustomScript \
           --force-update \
           --publisher Microsoft.Azure.Extensions \
-          --settings '{"fileUris": []}' \
-          --protected-settings "{\"commandToExecute\": \"export GITHUB_TOKEN=${{ secrets.TOKEN }} && sudo -u azureuser bash /home/azureuser/chatbot-project-SDA/update_app.sh\"}"
+          --settings '{"fileUris": []}' \ser bash /home/azureuser/chatbot-project-SDA/update_app.sh\"}"
