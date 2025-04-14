@@ -49,7 +49,7 @@ jobs:
       run: |
         az vmss extension set \
           --resource-group ${{ secrets.RESOURCE_GROUP }} \
-          --vmss-name ${{ secrets.VMSS_NAME }}\
+        --vmss-name ${{ secrets.VMSS_NAME }}\
           --name CustomScript \
           --force-update \
           --publisher Microsoft.Azure.Extensions \
