@@ -10,40 +10,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    # Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip'
+    # Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'  
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+    # Install dependencies
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
 
-      - name: Run tests
-        run: |
-          echo "Run tests"
+    # Run tests
+    - name: Run tests
+      run: |
+        echo "Run tests"
 
-      - name: Azure Login
-        uses: azure/login@v2.2.0
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+    # Login to Azure
+    - name: Azure Login
+      uses: azure/login@v2.2.0
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Start VMSS
-        run: |
-          az vmss start --resource-group ${{ secrets.RESOURCE_GROUP }} --name ${{ secrets.VMSS_NAME }}
-
-      - name: Update VMSS 
-        run: |
-          az vmss extension set \
-            --resource-group ${{ secrets.RESOURCE_GROUP }} \
-            --vmss-name ${{ secrets.VMSS_NAME }} \
-            --name customScript \
-            --publisher Microsoft.Azure.Extensions \
-            --version 2.0 \
-            --force-update \
-            --settings '{"fileUris": []}' \
-            --protected-settings "{\"commandToExecute\": \"export GITHUB_TOKEN=${{ secrets.TOKEN }} && sudo -u azureuser bash /home/azureuser/chatbot-project-SDA/update_app.sh\"}"
+    # Update the VM with secure token passing
+    - name: Azure VMSS Update
+      run: |
+        az vmss extension set \
+          --resource-group ${{ secrets.RESOURCE_GROUP }} \
+          --vmss-name ${{ secrets.VM_NAME }} \
+          --name CustomScript \
+          --force-update \
+          --publisher Microsoft.Azure.Extensions \
+          --settings '{"fileUris": []}' \
+          --protected-settings '{"commandToExecute": "export GITHUB_TOKEN=${{ secrets.TOKEN }} && sudo -u azureuser bash /home/azureuser/chatbot-project-SDA/update_app.sh"}'
