@@ -45,13 +45,13 @@ jobs:
           --name ${{ secrets.VMSS_NAME }}
 
     # Update the VMSS with secure token passing
-   - name: Update VMSS with Secure Token Passing
-    run: |
-      az vmss extension set \
-      --resource-group ${{ secrets.RESOURCE_GROUP }} \
-      --vmss-name ${{ secrets.VMSS_NAME }} \
-      --name CustomScript \
-      --publisher Microsoft.Azure.Extensions \
-      --version 2.0 \
-      --settings "{'fileUris': []}" \
-      --protected-settings "{\"commandToExecute\": \"export GITHUB_TOKEN=${{ secrets.TOKEN }} && sudo -u azureuser bash /home/azureuser/chatbot-project-SDA/update_app.sh\"}"
+    - name: Update VMSS with Secure Token Passing
+      run: |
+        az vmss extension set \
+          --resource-group ${{ secrets.RESOURCE_GROUP }} \
+          --vmss-name ${{ secrets.VMSS_NAME }} \
+          --name CustomScript \
+          --publisher Microsoft.Azure.Extensions \
+          --version 2.0 \
+          --settings "{'fileUris': []}" \
+          --protected-settings "{\"commandToExecute\": \"export GITHUB_TOKEN=${{ secrets.TOKEN }} && sudo -u azureuser bash /home/azureuser/chatbot-project-SDA/update_app.sh\"}"
