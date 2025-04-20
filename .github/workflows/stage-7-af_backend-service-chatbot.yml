@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure Functions: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python project to Azure Function App - backend-service-2025
+name: Build and deploy Python project to Azure Function App - backend-service-SDA
 
 on:
   push:
@@ -69,17 +69,18 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F4CEAB06A1554B2FB0AC95869EFBC883 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BF32BF4BCFDB4F99AE0608CEA3D5DD88 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_39722340F2C249749B97A7EEA13E8EC1 }}
 
       - name: Set Application Settings
         run: |
-          az functionapp config appsettings set --name backend-service-chatbot --resource-group SDA-chatbot-project --settings "FUNCTIONS_WORKER_RUNTIME=python" "KEY_VAULT_NAME=sda-chatbot-keyvault" "APPINSIGHTS_INSTRUMENTATIONKEY=azurerm_application_insights.ai.instrumentation_key"
-
+          az functionapp config appsettings set --name backend-service-SDA --resource-group SDA-chatbot-project --settings "FUNCTIONS_WORKER_RUNTIME=python" "KEY_VAULT_NAME=sda-chatbot-keyvault" "APPINSIGHTS_INSTRUMENTATIONKEY=azurerm_application_insights.ai.instrumentation_key"
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
         id: deploy-to-function
         with:
-          app-name: 'backend-service-chatbot'
+          app-name: 'backend-service-SDA'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           scm-do-build-during-deployment: true
