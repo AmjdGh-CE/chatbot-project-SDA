@@ -35,12 +35,12 @@ jobs:
           source venv/bin/activate
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt --target=".python_packages/lib/site-packages"
 
       # Optional: Add step to run tests here
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: zip -r release.zip ./* .python_packages/*
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -72,7 +72,10 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_741FF1BF0E0F4A9B86D94346FB14A420 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_AB79F92552A04A8DB3752C63ABB6FDC3 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E1FFCC3DEDA84556BD059449424ECF67 }}
-
+      
+      - name: Set Application Settings
+        run: |
+          az functionapp config appsettings set --name chatbot-backend-sda --resource-group SDA-chatbot-project --settings "FUNCTIONS_WORKER_RUNTIME=python" "KEY_VAULT_NAME=sda-chatbot-keyvault" "APPINSIGHTS_INSTRUMENTATIONKEY=azurerm_application_insights.ai.instrumentation_key"
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
         id: deploy-to-function
