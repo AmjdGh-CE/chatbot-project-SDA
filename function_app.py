@@ -215,9 +215,13 @@ async def upload_pdf(req: func.HttpRequest) -> func.HttpResponse:
         )
 
         vectorstore.add_texts(
-            [doc.page_content for doc in texts], 
-            ids=[str(uuid.uuid4()) for _ in texts],
-            metadatas=[{"pdf_uuid": pdf_uuid} for _ in texts]    
+    [doc.page_content for doc in texts], 
+    ids=[str(uuid.uuid4()) for _ in texts],
+    metadatas=[
+        {"pdf_uuid": pdf_uuid, "_type": "document"} 
+        for _ in texts
+    ]
+)
         )
 
         os.remove(temp_path)
